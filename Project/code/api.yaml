@@ -1,0 +1,664 @@
+openapi: 3.0.0
+info:
+  title: Grocery Store API
+  description: >
+    <div>API created for Grocery Store using Flask-Restful in OpenAPI standards.
+    </div>
+
+    <h3> Users Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>admin</td>
+        <td>Boolean</td>
+        <td>Not Null, Default 0</td>
+      </tr>         
+    </tbody>
+    </table>
+
+    <h3> Products Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>
+      <tr>
+        <td>stock</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>description</td>
+        <td>String</td>
+        <td>Nullable</td>
+      </tr>       
+      <tr>
+        <td>availability</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>mfg_date</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>exp_date</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>        
+      <tr>
+        <td>m_r_p</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>type</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>    
+      <tr>
+        <td>owner</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>        
+      <tr>
+        <td>cat_id</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>                    
+    </tbody>
+    </table>
+
+
+    <h3> Categories Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>
+      <tr>
+        <td>description</td>
+        <td>String</td>
+        <td>Nullable</td>
+      </tr>
+      <tr>
+        <td>owner</td>
+        <td>Integer</td>
+        <td>Not null</td>
+      </tr>
+      <tr>
+    </tbody>
+    </table>
+
+
+    <h3> Purchases Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>owner</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>customer</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>product</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>qty</td>
+        <td>Integer</td>
+        <td>Not null</td>
+      </tr>
+      <tr>
+    </tbody>
+    </table>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Users</td>
+        <td>ID001</td>
+        <td>Invalid file type</td>
+      </tr>
+      <tr>
+        <td>Users</td>
+        <td>USER002</td>
+        <td>Password should be atleast 3 characters long</td>
+      </tr>
+      <tr>
+        <td>Products</td>
+        <td>PR001</td>
+        <td>Invalid file type</td>
+      </tr>
+      <tr>
+        <td>Categories</td>
+        <td>CAT001</td>
+        <td>Invalid Username</td>
+      </tr> 
+    </tbody>
+    </table>
+
+  version: 1.0.0
+servers:
+  - url: http://localhost:2345/
+paths:
+  /api/categories/{name}:
+    description: End point to read, update and delete a category resource.
+    get:
+      description: Operation to Read category resource.
+      tags:
+        - "users"
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            example: Category
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: category object
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: User
+                  description:
+                    type: string
+                    example: This is a category
+                  owner:
+                    type: integer
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Category not found
+  /api/categoriess:
+    description: End point to create category resource
+    put:
+      description: Operation to update the category resource.
+      tags:
+        - "categories"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                New name:
+                  type: string
+                New description:
+                  type: string
+                New owner:
+                  type: integer
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: User
+                  description:
+                    type: string
+                    example: abcd
+                  owner:
+                    type: integer
+        '404':
+          description: Category not found
+        '401':
+          description: Unauthorized action
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the category resource
+      tags:
+        - "categories"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully Deleted
+        '401':
+          description: Unauthorized action
+        '404':
+          description: User not found
+        '500':
+          description: Intenal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    
+  /api/products/{product_id}:
+    description: Url to read, update and delete the product resource.
+    get:
+      description: Operation to read product resource
+      tags:
+        - "products"
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: post object
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Name
+                  stock:
+                    type: integer
+                    example: 50
+                  description:
+                    type: string
+                    example: description
+                  availability:
+                    type: string
+                    example: available
+                  mfg_date:
+                    type: string
+                    example: 2023-09-02
+                  exp_date:
+                    type: string
+                    example: 2023-11-12
+                  m_r_p:
+                    type: integer
+                    example: 100
+                  type:
+                    type: string
+                    example: kg
+                  owner:
+                    type: integer
+                    example: 1
+                  cat_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal server error
+        '404':
+          description: Product not found
+    put:
+      description: Operation to update the product resource
+      tags:
+        - "products"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                    type: string
+                    example: Name
+                  stock:
+                    type: integer
+                    example: 50
+                  description:
+                    type: string
+                    example: description
+                  availability:
+                    type: string
+                    example: available
+                  mfg_date:
+                    type: string
+                    example: 2023-09-02
+                  exp_date:
+                    type: string
+                    example: 2023-11-12
+                  m_r_p:
+                    type: integer
+                    example: 100
+                  type:
+                    type: string
+                    example: kg
+                  owner:
+                    type: integer
+                    example: 1
+                  cat_id:
+                    type: integer
+                    example: 1
+            encoding:
+              description:
+                contentType: text/plain
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Name
+                  stock:
+                    type: integer
+                    example: 50
+                  description:
+                    type: string
+                    example: description
+                  availability:
+                    type: string
+                    example: available
+                  mfg_date:
+                    type: string
+                    example: 2023-09-02
+                  exp_date:
+                    type: string
+                    example: 2023-11-12
+                  m_r_p:
+                    type: integer
+                    example: 100
+                  type:
+                    type: string
+                    example: kg
+                  owner:
+                    type: integer
+                    example: 1
+                  cat_id:
+                    type: integer
+                    example: 1
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized action
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the product resource
+      tags:
+        - "products"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized action
+  /api/product:
+    description: Url to create product resource
+    post:
+      description: Operation to create the product resource
+      tags:
+        - "products"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                stock:
+                  type: integer
+                  format: 50
+                owner:
+                  type: integer
+                  format: 1
+              required:
+                -name
+                -stock
+                -owner
+            encoding:
+              Text:
+                contentType: text/txt
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Name
+                  stock:
+                    type: integer
+                    example: 50
+                  description:
+                    type: string
+                    example: description
+                  availability:
+                    type: string
+                    example: available
+                  mfg_date:
+                    type: string
+                    example: 2023-09-02
+                  exp_date:
+                    type: string
+                    example: 2023-11-12
+                  m_r_p:
+                    type: integer
+                    example: 100
+                  type:
+                    type: string
+                    example: kg
+                  owner:
+                    type: integer
+                    example: 1
+                  cat_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Product not found
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/product/{name}:
+    description: Url to read, update and delete the product resource.
+    get:
+      description: Operation to get products written by an admin
+      tags:
+        - "products"
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            example: "user"
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: post object
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: Name
+                    stock:
+                      type: integer
+                      example: 50
+                    description:
+                      type: string
+                      example: description
+                    availability:
+                      type: string
+                      example: available
+                    mfg_date:
+                      type: string
+                      example: 2023-09-02
+                    exp_date:
+                      type: string
+                      example: 2023-11-12
+                    m_r_p:
+                      type: integer
+                      example: 100
+                    type:
+                      type: string
+                      example: kg
+                    owner:
+                      type: integer
+                      example: 1
+                    cat_id:
+                      type: integer
+                      example: 1
+                    
+        '500':
+          description: Internal server error
+        '404':
+          description: Product not found
+          
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

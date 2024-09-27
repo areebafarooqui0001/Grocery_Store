@@ -1,0 +1,10 @@
+Instructions to Run the App:
+
+Open terminal from the folder 
+cd into the directory of the project ("cd code")
+Run python main.py
+
+If an error occurs regarding python dependencies, run pip install -r requirements.txt and then repeat 
+the above step.
+For further details regarding the app, refer to Project Report.
+
